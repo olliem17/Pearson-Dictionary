@@ -20,11 +20,11 @@
     <script src="lib/ICanHandlebarz.js"></script>
     <script src="lib/pearson_sdk.js"></script>
     <script src="lib/jquery.xdomainrequest.min.js"></script>
-    
+
     <script src="lib/app.js"></script>
 
     <!-- Template for displaying the list of results found -->
-    <script id="template_entries" type='text/html'>
+    <script id="template_entries" type="text/html">
       <div>
        <div class="panel-group" id="accordion">
          {{#results}}
@@ -41,12 +41,12 @@
               </div>
             </div>
           </div>
-          {{/results}} 
+          {{/results}}
         </div>
       </script>
-  
+
     <!-- Template for displaying the 'pronunciations' for a given entry -->
-    <script id="partial_prons" class="partial" type='text/html'>
+    <script id="partial_prons" class="partial" type="text/html">
         <p>
         {{#if ipa}}(ipa) {{ipa}}{{/if}}
         {{#if kk}}(kk) {{kk}}{{/if}}
@@ -56,7 +56,7 @@
     </script>
 
     <!-- Template for displaying the 'senses' for a given entry -->
-    <script id="partial_sense" class="partial" type='text/html'>
+    <script id="partial_sense" class="partial" type="text/html">
       <li>
       {{#if definition}}<p>{{definition}} </p>{{/if}}
       {{#if translation}}<p>{{translation}} </p>{{/if}}
@@ -79,9 +79,9 @@
       </li>
     </script>
 
-        
+
     <!-- Template for displaying an 'entry'. Note this includes other templates -->
-    <script id="template_entry"  type='text/html'>
+    <script id="template_entry"  type="text/html">
         <h4>{{headword}} {{#if gramatical_info}}<span style="font-size:75%">[{{gramatical_info.type}}]</span>{{/if}}</h4>
         {{#audio}}<a class="audio"><span class="glyphicon glyphicon-volume-up"><audio><source src="http://api.pearson.com{{url}}"></audio></span></a>{{/audio}}
         {{#if images}}
@@ -115,7 +115,7 @@
     <h3>PearsonAPI Dictionaries sample application</h3>
 
     <form id="search_form" action="" class="navbar-form">
-    
+
     <div class="input-group">
        <input id="searchbox" type="Search" placeholder="headword..." class="form-control" />
        <div class="input-group-btn">
@@ -142,8 +142,8 @@
     <br/>
     <div id="pagination"></div>
   </form>
-    
-    <div id="entries"></div> <!-- make this hidden by default -->        
+
+    <div id="entries"></div> <!-- make this hidden by default -->
     </div>
 
   </body>

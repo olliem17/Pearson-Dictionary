@@ -1,0 +1,150 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PearsonAPI SDK Dictionary Sample">
+    <meta name="author" content="Lawrie Nichols/Toby Simms">
+
+    <title>PearsonAPI SDK Dictionary Sample</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap-theme.min.css">
+    <link href="css/launch.css" rel="stylesheet">
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min.js"></script>
+    <script src="lib/handlebars.js"></script>
+    <script src="lib/ICanHandlebarz.js"></script>
+    <script src="lib/pearson_sdk.js"></script>
+    <script src="lib/jquery.xdomainrequest.min.js"></script>
+    
+    <script src="lib/app.js"></script>
+
+    <!-- Template for displaying the list of results found -->
+    <script id="template_entries" type='text/html'>
+      <div>
+       <div class="panel-group" id="accordion">
+         {{#results}}
+         <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#{{id}}">
+                <em>{{headword}}</em> </a> {{#if homnum}}<sup>{{homnum}}</sup>{{/if}} {{#if part_of_speech}}<span class="label label-primary">{{part_of_speech}}</span>{{/if}}
+                <span style="float:right" class="label label-warning">{{datasets.[0]}}</span>
+              </h4>
+            </div>
+            <div id="{{id}}" class="panel-collapse collapse">
+              <div class="panel-body">
+              </div>
+            </div>
+          </div>
+          {{/results}} 
+        </div>
+      </script>
+  
+    <!-- Template for displaying the 'pronunciations' for a given entry -->
+    <script id="partial_prons" class="partial" type='text/html'>
+        <p>
+        {{#if ipa}}(ipa) {{ipa}}{{/if}}
+        {{#if kk}}(kk) {{kk}}{{/if}}
+         {{#audio}}<a class="audio"><span class="glyphicon glyphicon-volume-up"><audio><source src="http://api.pearson.com{{url}}"></audio></span></a>{{/audio}}
+        {{#lang}} ({{.}}) {{/lang}}
+        </p>
+    </script>
+
+    <!-- Template for displaying the 'senses' for a given entry -->
+    <script id="partial_sense" class="partial" type='text/html'>
+      <li>
+      {{#if definition}}<p>{{definition}} </p>{{/if}}
+      {{#if translation}}<p>{{translation}} </p>{{/if}}
+      {{#if subsenses}}
+      <ol type="a">
+      {{#each subsenses}}
+        {{> partial_sense}}
+      {{/each}}
+      </ol>
+      {{/if}}
+      {{#if examples}}
+      <ol type="i">
+      {{#examples}}
+        <li><em style="font-size:90%">{{text}}</em>
+           {{#audio}}<a class="audio"><span class="glyphicon glyphicon-volume-up"><audio><source src="http://api.pearson.com{{url}}"></audio></span></a>{{/audio}}
+        </li>
+      {{/examples}}
+      </ol>
+      {{/if}}
+      </li>
+    </script>
+
+        
+    <!-- Template for displaying an 'entry'. Note this includes other templates -->
+    <script id="template_entry"  type='text/html'>
+        <h4>{{headword}} {{#if gramatical_info}}<span style="font-size:75%">[{{gramatical_info.type}}]</span>{{/if}}</h4>
+        {{#audio}}<a class="audio"><span class="glyphicon glyphicon-volume-up"><audio><source src="http://api.pearson.com{{url}}"></audio></span></a>{{/audio}}
+        {{#if images}}
+          <img style="float:right" src="{{expandUrl images.0.url}}"/>
+        {{/if}}
+        {{#if pronunciations}}
+        <h4><span class="label label-default">pronunciation</span></h4>
+        {{#pronunciations}}
+          {{>partial_prons}}
+        {{/pronunciations}}
+        {{/if}}
+        <h4><span class="label label-default">senses</span></h4>
+        <ol>
+        {{#each senses}}
+          {{> partial_sense}}
+        {{/each}}
+        </ol>
+        {{#if examples}}
+        <h4><span class="label label-default">examples</span></h4>
+          <ol>
+          {{#examples}}
+            <li>{{text}}</li>
+          {{/examples}}
+          </ol>
+        {{/if}}
+    </script>
+  </head>
+
+  <body>
+    <div class="container">
+    <h3>PearsonAPI Dictionaries sample application</h3>
+
+    <form id="search_form" action="" class="navbar-form">
+    
+    <div class="input-group">
+       <input id="searchbox" type="Search" placeholder="headword..." class="form-control" />
+       <div class="input-group-btn">
+           <button class="btn btn-info">
+           <span class="glyphicon glyphicon-search"></span>
+           </button>
+       </div>
+    </div>
+    <br/>
+    <div id="datasets" class="btn-group" data-toggle="buttons">
+      <label class="btn btn-info">
+        <input type="checkbox" value="ldoce5"> LDOCE5
+      </label>
+      <label class="btn btn-info">
+        <input type="checkbox" value="lasde"> LASDE
+      </label>
+      <label class="btn btn-info">
+        <input type="checkbox" value="ldec"> LDEC
+      </label>
+      <label class="btn btn-info">
+        <input type="checkbox" value="wordwise"> WordWise
+      </label>
+    </div>
+    <br/>
+    <div id="pagination"></div>
+  </form>
+    
+    <div id="entries"></div> <!-- make this hidden by default -->        
+    </div>
+
+  </body>
+</html>
